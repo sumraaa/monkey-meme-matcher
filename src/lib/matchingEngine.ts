@@ -3,7 +3,6 @@ import { MemeLibrary, MemeEntry } from '../types/meme';
 
 export const findBestMatch = (
   liveExpressions: faceapi.FaceExpressions,
-  mesh: any | null,
   library: MemeLibrary
 ): { match: MemeEntry; score: number } | null => {
   if (!liveExpressions || !library.length) return null;
@@ -11,52 +10,7 @@ export const findBestMatch = (
   let targetUrl = 'still monkey.jpeg';
   let score = 50;
 
-  let isMouthOpen = false;
-  let isSideEye = false;
-
-  if (mesh && mesh.length >= 68) {
-    // --- MOUTH OPENNESS TRACKING ---
-    const topInnerLip = mesh[62];
-    const bottomInnerLip = mesh[66];
-    const leftCorner = mesh[60];
-    const rightCorner = mesh[64];
-
-    const mouthHeight = bottomInnerLip.y - topInnerLip.y;
-    const mouthWidth = rightCorner.x - leftCorner.x;
-    const mouthRatio = mouthHeight / (mouthWidth || 1);
-
-    if (mouthRatio > 0.25) {
-      isMouthOpen = true;
-    }
-
-    // --- ASYMMETRICAL EYEBROW RAISE TRACKING ---
-    const leftEyeY = mesh.slice(36, 42).reduce((sum: number, p: any) => sum + p.y, 0) / 6;
-    const leftEyebrowY = mesh.slice(17, 22).reduce((sum: number, p: any) => sum + p.y, 0) / 5;
-    
-    const rightEyeY = mesh.slice(42, 48).reduce((sum: number, p: any) => sum + p.y, 0) / 6;
-    const rightEyebrowY = mesh.slice(22, 27).reduce((sum: number, p: any) => sum + p.y, 0) / 5;
-
-    const leftBrowDist = leftEyeY - leftEyebrowY;
-    const rightBrowDist = rightEyeY - rightEyebrowY;
-    
-    const asymmetryRatio = Math.max(leftBrowDist, rightBrowDist) / (Math.min(leftBrowDist, rightBrowDist) || 1);
-
-    // Immediate console log to verify tracking
-    console.log("👀 BROW RATIO DETECTED:", asymmetryRatio.toFixed(3));
-
-    // Trigger if one eyebrow is clearly raised more than the other
-    if (asymmetryRatio >= 1.10) {
-      isSideEye = true;
-    }
-  }
-
-  if (isSideEye) {
-    targetUrl = 'sideeyes'; // Will match sideeyes.jpg or sideeyes_2.jpg
-    score = 95.0;
-  } else if (isMouthOpen) {
-    targetUrl = 'think.jpg';
-    score = 95.0;
-  } else if (liveExpressions.happy > 0.4) {
+  if (liveExpressions.happy > 0.4) {
     targetUrl = 'think monek.jpeg';
     score = Math.min(99.9, 80 + (liveExpressions.happy * 20));
   } else if (liveExpressions.surprised > 0.3) {

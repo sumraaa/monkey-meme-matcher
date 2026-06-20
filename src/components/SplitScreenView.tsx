@@ -9,7 +9,7 @@ import { useMemeMatcher } from '../hooks/useMemeMatcher';
 export default function SplitScreenView() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { mesh, expressions, isDetecting, startDetection, stopDetection } = useFaceDetection(videoRef);
-  const { matchedMeme } = useMemeMatcher(expressions, mesh);
+  const { matchedMeme } = useMemeMatcher(expressions);
 
   useEffect(() => {
     // Request camera access
