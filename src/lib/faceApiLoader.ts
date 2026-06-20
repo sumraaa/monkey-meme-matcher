@@ -14,7 +14,7 @@ export const loadModels = async () => {
 
   isLoading = true;
   try {
-    const MODEL_URL = '/models';
+    const MODEL_URL = 'https://justadudewhohacks.github.io/face-api.js/models/';
     await Promise.all([
       faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
       faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
