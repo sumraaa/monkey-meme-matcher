@@ -4,10 +4,8 @@
 
 @layer base {
   body {
-    background-color: #fdfbf7;
-    background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
-    background-size: 30px 30px;
-    color: #0f172a;
+    background-color: #020617; /* slate-950 */
+    color: #f1f5f9; /* slate-100 */
   }
 }
 

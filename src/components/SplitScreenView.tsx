@@ -35,21 +35,21 @@ export default function SplitScreenView() {
   }, []);
 
   return (
-    <div className="flex flex-col md:flex-row h-full gap-6">
-      <div className="flex-1 flex flex-col h-full bg-white border-4 border-black shadow-brutal overflow-hidden">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 py-8 h-full flex-1 w-full">
+      <div className="flex flex-col h-full min-h-[400px] bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-2xl p-4 shadow-xl overflow-hidden shadow-inner">
         <WebcamFeed videoRef={videoRef} mesh={mesh} onPlay={startDetection} />
       </div>
-      <div className="flex-1 flex flex-col h-full bg-meme-yellow border-4 border-black shadow-brutal overflow-hidden">
+      <div className="flex flex-col h-full min-h-[400px] bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-2xl p-4 shadow-xl overflow-hidden">
         <MatchedMemeDisplay matchData={matchedMeme} />
       </div>
 
       {/* DEBUG OVERLAY */}
       {expressions && (
-        <div className="absolute top-4 left-4 bg-white border-4 border-black p-4 text-xs font-mono text-black font-bold shadow-brutal z-50 pointer-events-none transform -rotate-2">
-          <p className="font-black border-b-2 border-black pb-1 mb-2 uppercase">Live Expressions</p>
+        <div className="absolute top-4 left-4 bg-slate-900/80 p-4 rounded-lg text-xs font-mono text-emerald-400 z-50 pointer-events-none border border-slate-800 backdrop-blur-sm">
+          <p className="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-2">LIVE EXPRESSIONS</p>
           {Object.entries(expressions).map(([key, val]) => (
             <div key={key} className="flex justify-between w-32">
-              <span>{key}:</span>
+              <span className="text-slate-400">{key}:</span>
               <span>{val.toFixed(2)}</span>
             </div>
           ))}
