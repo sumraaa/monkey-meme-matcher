@@ -41,8 +41,11 @@ export const findBestMatch = (
     
     const asymmetryRatio = Math.max(leftBrowDist, rightBrowDist) / (Math.min(leftBrowDist, rightBrowDist) || 1);
 
+    // Immediate console log to verify tracking
+    console.log("👀 BROW RATIO DETECTED:", asymmetryRatio.toFixed(3));
+
     // Trigger if one eyebrow is clearly raised more than the other
-    if (asymmetryRatio > 1.25) {
+    if (asymmetryRatio >= 1.10) {
       isSideEye = true;
     }
   }
