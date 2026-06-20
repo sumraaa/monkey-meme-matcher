@@ -27,8 +27,7 @@ export default function Page() {
   if (memes.length === 0) {
     memes = [
       '/publicmemes/still monkey.jpeg',
-      '/publicmemes/think monek.jpeg',
-      '/publicmemes/think.jpg',
+      '/memes/head.jpeg',
       '/memes/sideeyes.jpg',
       '/memes/sideeyes.jpeg'
     ];
