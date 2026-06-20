@@ -36,17 +36,17 @@ export default function SplitScreenView() {
 
   return (
     <div className="flex flex-col md:flex-row h-full gap-6">
-      <div className="flex-1 flex flex-col h-full bg-slate-950/50 rounded-2xl overflow-hidden border border-slate-800/80">
+      <div className="flex-1 flex flex-col h-full bg-white border-8 border-black shadow-brutal overflow-hidden">
         <WebcamFeed videoRef={videoRef} mesh={mesh} onPlay={startDetection} />
       </div>
-      <div className="flex-1 flex flex-col h-full bg-slate-950/50 rounded-2xl overflow-hidden border border-slate-800/80">
+      <div className="flex-1 flex flex-col h-full bg-meme-yellow border-8 border-black shadow-brutal overflow-hidden">
         <MatchedMemeDisplay matchData={matchedMeme} />
       </div>
 
       {/* DEBUG OVERLAY */}
       {expressions && (
-        <div className="absolute top-4 left-4 bg-black/80 p-4 rounded-lg text-xs font-mono text-green-400 z-50 pointer-events-none">
-          <p className="font-bold text-white mb-2">LIVE EXPRESSIONS:</p>
+        <div className="absolute top-4 left-4 bg-white border-4 border-black p-4 text-xs font-mono text-black font-bold shadow-brutal z-50 pointer-events-none transform -rotate-2">
+          <p className="font-black border-b-2 border-black pb-1 mb-2 uppercase">Live Expressions</p>
           {Object.entries(expressions).map(([key, val]) => (
             <div key={key} className="flex justify-between w-32">
               <span>{key}:</span>

@@ -26,11 +26,11 @@ export default function WebcamFeed({
       const ctx = canvas.getContext('2d');
       if (ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#10b981'; // emerald-500
+        ctx.fillStyle = '#FF2A85'; // meme-pink
         
         mesh.forEach(point => {
           ctx.beginPath();
-          ctx.arc(point.x, point.y, 2, 0, 2 * Math.PI);
+          ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
           ctx.fill();
         });
       }
@@ -43,22 +43,22 @@ export default function WebcamFeed({
   }, [mesh, videoRef]);
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center bg-black">
+    <div className="relative w-full h-full flex items-center justify-center bg-meme-green border-r-8 border-black md:border-r-0 md:border-b-8">
       <video
         ref={videoRef}
         autoPlay
         muted
         playsInline
         onPlay={onPlay}
-        className="absolute inset-0 w-full h-full object-cover transform -scale-x-100"
+        className="absolute inset-0 w-full h-full object-cover transform -scale-x-100 grayscale contrast-125"
       />
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full object-cover transform -scale-x-100 pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover transform -scale-x-100 pointer-events-none drop-shadow-md"
       />
       {!mesh && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-10">
-          <p className="text-emerald-400 font-mono animate-pulse">Detecting face...</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-white border-8 border-black m-8 shadow-brutal z-10 transform rotate-1">
+          <p className="text-black font-black uppercase text-2xl animate-pulse">Detecting Face...</p>
         </div>
       )}
     </div>

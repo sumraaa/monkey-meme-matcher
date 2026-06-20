@@ -8,10 +8,10 @@ export default function DetectButton({ isReady, onClick }: { isReady: boolean; o
       onClick={onClick}
       disabled={!isReady}
       className={`
-        relative group overflow-hidden rounded-full px-8 py-4 font-bold text-lg transition-all duration-300
+        relative overflow-hidden px-8 py-4 font-bold text-lg transition-all duration-200 border-4 border-black
         ${isReady 
-          ? 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 hover:scale-105 shadow-[0_0_40px_-10px_rgba(16,185,129,0.5)]' 
-          : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+          ? 'bg-meme-yellow text-black hover:translate-y-[2px] hover:translate-x-[2px] shadow-brutal hover:shadow-brutal-hover' 
+          : 'bg-slate-300 text-slate-500 cursor-not-allowed shadow-none'
         }
       `}
     >

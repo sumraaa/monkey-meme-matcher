@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    background-color: #fdfbf7;
+    background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
+    background-size: 30px 30px;
+    color: #0f172a;
+  }
+}
+
 @layer utilities {
   .animate-shimmer {
     animation: shimmer 2s infinite;
