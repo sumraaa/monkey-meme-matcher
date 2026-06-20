@@ -15,7 +15,7 @@ export const useFaceDetection = (videoRef: RefObject<HTMLVideoElement>) => {
 
     const initPose = async () => {
       const pose = await loadPoseModel();
-      pose.onResults((results) => {
+      pose.onResults((results: any) => {
         if (active && results.poseLandmarks) {
           setPoseLandmarks(results.poseLandmarks);
         } else {
