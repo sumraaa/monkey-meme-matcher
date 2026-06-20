@@ -3,6 +3,7 @@ import { MemeLibrary, MemeEntry } from '../types/meme';
 
 export const findBestMatch = (
   liveExpressions: faceapi.FaceExpressions,
+  mesh: any | null,
   library: MemeLibrary
 ): { match: MemeEntry; score: number } | null => {
   if (!liveExpressions || !library.length) return null;
@@ -10,7 +11,26 @@ export const findBestMatch = (
   let targetUrl = 'still monkey.jpeg';
   let score = 50;
 
-  if (liveExpressions.happy > 0.4) {
+  let isMouthOpen = false;
+  if (mesh && mesh.length >= 68) {
+    const topInnerLip = mesh[62];
+    const bottomInnerLip = mesh[66];
+    const leftCorner = mesh[60];
+    const rightCorner = mesh[64];
+
+    const mouthHeight = bottomInnerLip.y - topInnerLip.y;
+    const mouthWidth = rightCorner.x - leftCorner.x;
+    const mouthRatio = mouthHeight / (mouthWidth || 1);
+
+    if (mouthRatio > 0.25) {
+      isMouthOpen = true;
+    }
+  }
+
+  if (isMouthOpen) {
+    targetUrl = 'think.jpg';
+    score = 95.0;
+  } else if (liveExpressions.happy > 0.4) {
     targetUrl = 'think monek.jpeg';
     score = Math.min(99.9, 80 + (liveExpressions.happy * 20));
   } else if (liveExpressions.surprised > 0.3) {
