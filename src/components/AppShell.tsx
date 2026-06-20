@@ -26,8 +26,8 @@ export default function AppShell({ memes }: { memes: string[] }) {
       
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
         {!isDetecting ? (
-          <div className="text-center space-y-8 max-w-2xl bg-white p-12 border-8 border-black shadow-brutal-lg transform -rotate-1">
-            <h1 className="text-6xl font-extrabold tracking-tight text-black uppercase">
+          <div className="text-center space-y-8 max-w-2xl bg-white p-12 border-4 border-black shadow-brutal-lg transform -rotate-1">
+            <h1 className="text-6xl font-heading font-extrabold tracking-tight text-black uppercase">
               Meme Face Mimic
             </h1>
             <p className="text-xl text-black font-medium border-t-4 border-black pt-4">
@@ -41,9 +41,9 @@ export default function AppShell({ memes }: { memes: string[] }) {
             </div>
           </div>
         ) : (
-          <div className="w-full h-[90vh] max-w-7xl bg-meme-pink border-8 border-black shadow-brutal-lg overflow-hidden flex flex-col">
-            <div className="p-4 border-b-8 border-black flex justify-between items-center bg-white">
-              <h2 className="text-3xl font-black uppercase tracking-wider text-black">
+          <div className="w-full h-[90vh] max-w-7xl bg-meme-pink border-4 border-black shadow-brutal-lg overflow-hidden flex flex-col">
+            <div className="p-4 border-b-4 border-black flex justify-between items-center bg-white">
+              <h2 className="text-3xl font-heading font-black uppercase tracking-wider text-black">
                 Live Matching
               </h2>
               <button 

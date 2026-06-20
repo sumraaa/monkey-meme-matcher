@@ -16,19 +16,19 @@ export default function MatchedMemeDisplay({
             <img 
               src={matchData.match.url} 
               alt="Matched meme" 
-              className="max-w-full max-h-full object-contain border-8 border-black shadow-brutal transition-transform duration-300"
+              className="max-w-full max-h-full object-contain border-4 border-black shadow-brutal transition-transform duration-300"
             />
           </div>
           <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white px-6 py-3 border-4 border-black flex items-center gap-4 shadow-brutal transform rotate-2">
             <span className="text-black font-black uppercase tracking-widest">Match Score</span>
             <div className="h-8 w-[4px] bg-black"></div>
-            <span className="text-2xl font-black text-meme-pink">
+            <span className="text-2xl font-heading font-black text-meme-pink">
               {matchData.score.toFixed(1)}%
             </span>
           </div>
         </>
       ) : (
-        <div className="text-center space-y-4 bg-white p-8 border-8 border-black shadow-brutal transform -rotate-2">
+        <div className="text-center space-y-4 bg-white p-8 border-4 border-black shadow-brutal transform -rotate-2">
           <div className="text-6xl animate-bounce">🙈</div>
           <p className="text-black font-black uppercase text-xl">Waiting for a face...</p>
         </div>

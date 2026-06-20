@@ -36,10 +36,10 @@ export default function SplitScreenView() {
 
   return (
     <div className="flex flex-col md:flex-row h-full gap-6">
-      <div className="flex-1 flex flex-col h-full bg-white border-8 border-black shadow-brutal overflow-hidden">
+      <div className="flex-1 flex flex-col h-full bg-white border-4 border-black shadow-brutal overflow-hidden">
         <WebcamFeed videoRef={videoRef} mesh={mesh} onPlay={startDetection} />
       </div>
-      <div className="flex-1 flex flex-col h-full bg-meme-yellow border-8 border-black shadow-brutal overflow-hidden">
+      <div className="flex-1 flex flex-col h-full bg-meme-yellow border-4 border-black shadow-brutal overflow-hidden">
         <MatchedMemeDisplay matchData={matchedMeme} />
       </div>
 
