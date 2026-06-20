@@ -71,17 +71,17 @@ export const findBestMatch = (
     targetUrl = 'sideeyes'; // matches sideeyes.jpg or sideeyes.jpeg
     score = 95.0;
   } else if (isMouthOpen) {
-    targetUrl = 'head.jpeg';
+    targetUrl = 'think.jpg';
     score = 95.0;
   } else if (liveExpressions) {
     if (liveExpressions.happy > 0.4) {
-      targetUrl = 'head.jpeg';
+      targetUrl = 'think monek.jpeg';
       score = Math.min(99.9, 80 + (liveExpressions.happy * 20));
     } else if (liveExpressions.surprised > 0.3) {
-      targetUrl = 'head.jpeg';
+      targetUrl = 'think.jpg';
       score = Math.min(99.9, 80 + (liveExpressions.surprised * 20));
     } else if (liveExpressions.sad > 0.3) {
-      targetUrl = 'head.jpeg';
+      targetUrl = 'think.jpg';
       score = Math.min(99.9, 80 + (liveExpressions.sad * 20));
     } else if (liveExpressions.neutral > 0.5) {
       targetUrl = 'still monkey.jpeg';
