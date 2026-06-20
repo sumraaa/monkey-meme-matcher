@@ -8,8 +8,8 @@ import { useMemeMatcher } from '../hooks/useMemeMatcher';
 
 export default function SplitScreenView() {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { mesh, expressions, isDetecting, startDetection, stopDetection } = useFaceDetection(videoRef);
-  const { matchedMeme } = useMemeMatcher(expressions, mesh);
+  const { mesh, expressions, poseLandmarks, isDetecting, startDetection, stopDetection } = useFaceDetection(videoRef);
+  const { matchedMeme } = useMemeMatcher(expressions, mesh, poseLandmarks);
 
   useEffect(() => {
     // Request camera access
@@ -37,7 +37,7 @@ export default function SplitScreenView() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto px-4 py-8 h-full flex-1 w-full">
       <div className="flex flex-col h-full min-h-[400px] bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-2xl p-4 shadow-xl overflow-hidden shadow-inner">
-        <WebcamFeed videoRef={videoRef} mesh={mesh} onPlay={startDetection} />
+        <WebcamFeed videoRef={videoRef} mesh={mesh} poseLandmarks={poseLandmarks} onPlay={startDetection} />
       </div>
       <div className="flex flex-col h-full min-h-[400px] bg-slate-900/50 backdrop-blur-md border border-slate-800 rounded-2xl p-4 shadow-xl overflow-hidden">
         <MatchedMemeDisplay matchData={matchedMeme} />

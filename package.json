@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/pose": "^0.5.1675469404",
     "face-api.js": "^0.22.2",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",

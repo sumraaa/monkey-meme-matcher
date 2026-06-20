@@ -1,16 +1,35 @@
 import { useState, useEffect, useRef, RefObject } from 'react';
 import * as faceapi from 'face-api.js';
 import { LandmarkMesh } from '../types/landmarks';
+import { loadPoseModel } from '../lib/poseApiLoader';
 
 export const useFaceDetection = (videoRef: RefObject<HTMLVideoElement>) => {
   const [mesh, setMesh] = useState<LandmarkMesh | null>(null);
   const [expressions, setExpressions] = useState<faceapi.FaceExpressions | null>(null);
+  const [poseLandmarks, setPoseLandmarks] = useState<any | null>(null);
   const [isDetecting, setIsDetecting] = useState(false);
   const animationFrameRef = useRef<number>();
 
   useEffect(() => {
+    let active = true;
+
+    const initPose = async () => {
+      const pose = await loadPoseModel();
+      pose.onResults((results) => {
+        if (active && results.poseLandmarks) {
+          setPoseLandmarks(results.poseLandmarks);
+        } else {
+          setPoseLandmarks(null);
+        }
+      });
+      return pose;
+    };
+
+    let poseInstance: any = null;
+    initPose().then(p => { poseInstance = p; });
+
     const detectFace = async () => {
-      if (!videoRef.current || videoRef.current.paused || videoRef.current.ended || !isDetecting) {
+      if (!videoRef.current || videoRef.current.paused || videoRef.current.ended || !isDetecting || !active) {
         return;
       }
 
@@ -27,11 +46,16 @@ export const useFaceDetection = (videoRef: RefObject<HTMLVideoElement>) => {
           setMesh(null);
           setExpressions(null);
         }
+
+        // Run pose detection concurrently if ready
+        if (poseInstance) {
+          await poseInstance.send({ image: videoRef.current });
+        }
       } catch (err) {
         console.error("Detection error:", err);
       }
 
-      if (isDetecting) {
+      if (isDetecting && active) {
         animationFrameRef.current = requestAnimationFrame(detectFace);
       }
     };
@@ -41,6 +65,7 @@ export const useFaceDetection = (videoRef: RefObject<HTMLVideoElement>) => {
     }
 
     return () => {
+      active = false;
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
@@ -50,5 +75,5 @@ export const useFaceDetection = (videoRef: RefObject<HTMLVideoElement>) => {
   const startDetection = () => setIsDetecting(true);
   const stopDetection = () => setIsDetecting(false);
 
-  return { mesh, expressions, isDetecting, startDetection, stopDetection };
+  return { mesh, expressions, poseLandmarks, isDetecting, startDetection, stopDetection };
 };

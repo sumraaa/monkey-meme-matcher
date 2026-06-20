@@ -2,17 +2,34 @@ import * as faceapi from 'face-api.js';
 import { MemeLibrary, MemeEntry } from '../types/meme';
 
 export const findBestMatch = (
-  liveExpressions: faceapi.FaceExpressions,
+  liveExpressions: faceapi.FaceExpressions | null,
   mesh: any | null,
+  poseLandmarks: any | null,
   library: MemeLibrary
 ): { match: MemeEntry; score: number } | null => {
-  if (!liveExpressions || !library.length) return null;
+  if (!library.length || (!liveExpressions && !poseLandmarks)) return null;
 
   let targetUrl = 'still monkey.jpeg';
   let score = 50;
 
   let isMouthOpen = false;
   let isSideEye = false;
+  let isHandsOnHead = false;
+
+  // --- POSE TRACKING (HANDS ON HEAD) ---
+  if (poseLandmarks && poseLandmarks.length > 16) {
+    const nose = poseLandmarks[0];
+    const leftWrist = poseLandmarks[15];
+    const rightWrist = poseLandmarks[16];
+    
+    // In mediapipe, y=0 is top of image. 
+    // If both wrists are above the nose, trigger "hands on head"
+    if (leftWrist && rightWrist && nose && leftWrist.visibility > 0.5 && rightWrist.visibility > 0.5) {
+      if (leftWrist.y < nose.y && rightWrist.y < nose.y) {
+        isHandsOnHead = true;
+      }
+    }
+  }
 
   if (mesh && mesh.length >= 68) {
     // --- MOUTH OPENNESS TRACKING ---
@@ -47,29 +64,34 @@ export const findBestMatch = (
     }
   }
 
-  if (isSideEye) {
+  if (isHandsOnHead) {
+    targetUrl = 'head.jpeg';
+    score = 98.0;
+  } else if (isSideEye) {
     targetUrl = 'sideeyes'; // matches sideeyes.jpg or sideeyes.jpeg
     score = 95.0;
   } else if (isMouthOpen) {
     targetUrl = 'think.jpg';
     score = 95.0;
-  } else if (liveExpressions.happy > 0.4) {
-    targetUrl = 'think monek.jpeg';
-    score = Math.min(99.9, 80 + (liveExpressions.happy * 20));
-  } else if (liveExpressions.surprised > 0.3) {
-    targetUrl = 'think.jpg';
-    score = Math.min(99.9, 80 + (liveExpressions.surprised * 20));
-  } else if (liveExpressions.sad > 0.3) {
-    // Map sad/thinking to think.jpg since we don't have the gif
-    targetUrl = 'think.jpg';
-    score = Math.min(99.9, 80 + (liveExpressions.sad * 20));
-  } else if (liveExpressions.neutral > 0.5) {
-    targetUrl = 'still monkey.jpeg';
-    score = Math.min(99.9, 80 + (liveExpressions.neutral * 20));
-  } else {
-    // No clear expression dominates
-    targetUrl = 'still monkey.jpeg';
-    score = 85.5;
+  } else if (liveExpressions) {
+    if (liveExpressions.happy > 0.4) {
+      targetUrl = 'think monek.jpeg';
+      score = Math.min(99.9, 80 + (liveExpressions.happy * 20));
+    } else if (liveExpressions.surprised > 0.3) {
+      targetUrl = 'think.jpg';
+      score = Math.min(99.9, 80 + (liveExpressions.surprised * 20));
+    } else if (liveExpressions.sad > 0.3) {
+      // Map sad/thinking to think.jpg since we don't have the gif
+      targetUrl = 'think.jpg';
+      score = Math.min(99.9, 80 + (liveExpressions.sad * 20));
+    } else if (liveExpressions.neutral > 0.5) {
+      targetUrl = 'still monkey.jpeg';
+      score = Math.min(99.9, 80 + (liveExpressions.neutral * 20));
+    } else {
+      // No clear expression dominates
+      targetUrl = 'still monkey.jpeg';
+      score = 85.5;
+    }
   }
 
   // Find the meme in the library that matches the targetUrl
