@@ -28,6 +28,8 @@ export const useFaceDetection = (videoRef: RefObject<HTMLVideoElement>) => {
     let poseInstance: any = null;
     initPose().then(p => { poseInstance = p; });
 
+    let isPoseProcessing = false;
+
     const detectFace = async () => {
       if (!videoRef.current || videoRef.current.paused || videoRef.current.ended || !isDetecting || !active) {
         return;
@@ -47,9 +49,12 @@ export const useFaceDetection = (videoRef: RefObject<HTMLVideoElement>) => {
           setExpressions(null);
         }
 
-        // Run pose detection concurrently if ready
-        if (poseInstance) {
-          await poseInstance.send({ image: videoRef.current });
+        // Run pose detection non-blockingly so it doesn't freeze face-api
+        if (poseInstance && !isPoseProcessing) {
+          isPoseProcessing = true;
+          poseInstance.send({ image: videoRef.current }).finally(() => {
+            isPoseProcessing = false;
+          });
         }
       } catch (err) {
         console.error("Detection error:", err);

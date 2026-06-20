@@ -1,12 +1,14 @@
-import { Pose, Results, Options } from '@mediapipe/pose';
+let poseInstance: any = null;
 
-let poseInstance: Pose | null = null;
-
-export const loadPoseModel = async (): Promise<Pose> => {
+export const loadPoseModel = async (): Promise<any> => {
   if (poseInstance) return poseInstance;
 
+  // Dynamically import to avoid Next.js SSR window/self errors
+  const mediapipePose = await import('@mediapipe/pose');
+  const Pose = mediapipePose.Pose;
+
   const pose = new Pose({
-    locateFile: (file) => {
+    locateFile: (file: string) => {
       return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
     }
   });
@@ -20,7 +22,7 @@ export const loadPoseModel = async (): Promise<Pose> => {
     minTrackingConfidence: 0.5
   });
 
-  // Warm up the model (optional, usually MediaPipe loads on first send)
+  // Warm up the model
   await pose.initialize();
   
   poseInstance = pose;
