@@ -12,7 +12,10 @@ export const findBestMatch = (
   let score = 50;
 
   let isMouthOpen = false;
+  let isSideEye = false;
+
   if (mesh && mesh.length >= 68) {
+    // --- MOUTH OPENNESS TRACKING ---
     const topInnerLip = mesh[62];
     const bottomInnerLip = mesh[66];
     const leftCorner = mesh[60];
@@ -25,9 +28,29 @@ export const findBestMatch = (
     if (mouthRatio > 0.25) {
       isMouthOpen = true;
     }
+
+    // --- ASYMMETRICAL EYEBROW RAISE TRACKING ---
+    const leftEyeY = mesh.slice(36, 42).reduce((sum: number, p: any) => sum + p.y, 0) / 6;
+    const leftEyebrowY = mesh.slice(17, 22).reduce((sum: number, p: any) => sum + p.y, 0) / 5;
+    
+    const rightEyeY = mesh.slice(42, 48).reduce((sum: number, p: any) => sum + p.y, 0) / 6;
+    const rightEyebrowY = mesh.slice(22, 27).reduce((sum: number, p: any) => sum + p.y, 0) / 5;
+
+    const leftBrowDist = leftEyeY - leftEyebrowY;
+    const rightBrowDist = rightEyeY - rightEyebrowY;
+    
+    const asymmetryRatio = Math.max(leftBrowDist, rightBrowDist) / (Math.min(leftBrowDist, rightBrowDist) || 1);
+
+    // Trigger if one eyebrow is clearly raised more than the other
+    if (asymmetryRatio > 1.25) {
+      isSideEye = true;
+    }
   }
 
-  if (isMouthOpen) {
+  if (isSideEye) {
+    targetUrl = 'sideeyes'; // Will match sideeyes.jpg or sideeyes_2.jpg
+    score = 95.0;
+  } else if (isMouthOpen) {
     targetUrl = 'think.jpg';
     score = 95.0;
   } else if (liveExpressions.happy > 0.4) {

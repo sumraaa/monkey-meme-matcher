@@ -6,12 +6,18 @@ export default function Page() {
   // Try to read from public/publicmemes first, otherwise provide default placeholder paths
   let memes: string[] = [];
   try {
-    const memesDir = path.join(process.cwd(), 'public', 'publicmemes');
-    if (fs.existsSync(memesDir)) {
-      const files = fs.readdirSync(memesDir);
-      memes = files
-        .filter(file => !file.endsWith('.gif')) // Excluding gifs as requested
-        .map(file => `/publicmemes/${file}`);
+    const memesDirs = [
+      { dir: path.join(process.cwd(), 'public', 'publicmemes'), prefix: '/publicmemes/' },
+      { dir: path.join(process.cwd(), 'public', 'memes'), prefix: '/memes/' }
+    ];
+
+    for (const { dir, prefix } of memesDirs) {
+      if (fs.existsSync(dir)) {
+        const files = fs.readdirSync(dir);
+        memes = memes.concat(files
+          .filter(file => !file.endsWith('.gif')) // Excluding gifs as requested
+          .map(file => `${prefix}${file}`));
+      }
     }
   } catch (error) {
     console.error("Error reading memes directory:", error);
@@ -22,7 +28,9 @@ export default function Page() {
     memes = [
       '/publicmemes/still monkey.jpeg',
       '/publicmemes/think monek.jpeg',
-      '/publicmemes/think.jpg'
+      '/publicmemes/think.jpg',
+      '/publicmemes/sideeyes.jpg',
+      '/publicmemes/sideeyes_2.jpg'
     ];
   }
 
